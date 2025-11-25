@@ -28,6 +28,7 @@ async function *read_stream(body: ReadableStream): AsyncGenerator<I_stream_item,
       else {
         // @ts-ignore:
         const content = parsed?.choices?.[0]?.delta?.content
+        // console.log({ parsed})
         if (typeof(content) === 'string')
           yield [null, content]
         else

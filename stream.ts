@@ -1,13 +1,12 @@
 import { I_msg } from './type.ts'
 
+type I_err_key = 'http error' | 'null body'
+
 type I_make_client_stream = (opts: {
     api_key: string
     base_url: string
 }) => (model: string) => (msg_list: I_msg[]) =>
-    Promise<[null, ReadableStream]
-        | ['http error', Response]
-        | ['unknown error', string]
-    >
+    Promise<[null, ReadableStream] | [I_err_key, Response]>
 
 export
 const make_client__stream: I_make_client_stream = opts => model => async msg_list => {
@@ -26,6 +25,6 @@ const make_client__stream: I_make_client_stream = opts => model => async msg_lis
     if (!response.ok)
         return ['http error', response]
     if (response.body === null)
-        return ['unknown error', 'response body is null']
+        return ['null body', response]
     return [null, response.body]
 }
